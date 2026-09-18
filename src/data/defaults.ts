@@ -19,6 +19,36 @@ export const DEFAULT_COMPANY: Company = {
   logo: "⚙️"
 };
 
+export const DEFAULT_COMPANIES: Company[] = [
+  DEFAULT_COMPANY,
+  {
+    razaoSocial: "Indústria Têxtil Catarinense S.A.",
+    cnpj: "23.456.789/0001-10",
+    endereco: "Rua das Fiações, nº 820",
+    bairro: "Velha",
+    cidade: "Blumenau",
+    uf: "SC",
+    cep: "89036-000",
+    telefone: "(47) 3322-1100",
+    cnae: "13.21-9-00 - Tecelagem de fios de algodão",
+    grauRisco: "Grau de Risco 2",
+    logo: "🏢"
+  },
+  {
+    razaoSocial: "Cerâmica do Sul Mineração Ltda",
+    cnpj: "34.567.890/0001-22",
+    endereco: "Rodovia SC-445, Km 12",
+    bairro: "Mina União",
+    cidade: "Criciúma",
+    uf: "SC",
+    cep: "88815-000",
+    telefone: "(48) 3431-9000",
+    cnae: "23.42-7-02 - Fabricação de artefatos cerâmicos",
+    grauRisco: "Grau de Risco 3",
+    logo: "🛡️"
+  }
+];
+
 export const DEFAULT_RESPONSIBLE: Responsible = {
   nome: "Dr. Roberto Alencar de Souza",
   funcao: "Médico do Trabalho / Coordenador do PCMSO",
@@ -70,16 +100,16 @@ export const DEFAULT_GHES: GHE[] = [
   {
     id: "ghe-1",
     gesNumero: "GHE-01",
-    avaliacaoRiscos: "Exposição crônica a ruído de impacto e contínuo proveniente de prensas e tornos mecânicos.",
-    intensidadeConcentracao: 92.4, // dB(A)
-    funcaoGes: "Operador de Prensa / Operador de Torno CNC",
+    avaliacaoRiscos: "Exposição crônica a ruído contínuo e de impacto em prensas pesadas e conformação mecânica.",
+    intensidadeConcentracao: 92.4, // dB(A) - Acima de 85 dB (Vermelho) -> Vinculado ao Grupo 3 (PAIR)
+    funcaoGes: "Operador de Prensa / Estamparia Pesada",
     necessarioEpi: true,
     epi1Id: "epi-2", // Abafador 3M Muffler (21 dB)
     ca1: "14235",
     nrrsf1: 21,
-    atenuacao1: 15, // Fator aproximado
+    atenuacao1: 15,
     eficaz1: true,
-    epi2Id: "epi-1", // Plug de Silicone (15 dB)
+    epi2Id: "epi-1",
     ca2: "11512",
     nrrsf2: 15,
     atenuacao2: 10,
@@ -89,9 +119,9 @@ export const DEFAULT_GHES: GHE[] = [
   {
     id: "ghe-2",
     gesNumero: "GHE-02",
-    avaliacaoRiscos: "Ruído contínuo e intermitente decorrente de arcos de soldagem e lixamento.",
-    intensidadeConcentracao: 86.8, // dB(A)
-    funcaoGes: "Soldador / Auxiliar de Caldeiraria",
+    avaliacaoRiscos: "Ruído intermitente de alta intensidade decorrente de arcos elétricos de solda MIG/MAG e corte plasma.",
+    intensidadeConcentracao: 87.5, // dB(A) - Acima de 85 dB (Vermelho) -> Vinculado ao Grupo 4 (MTL)
+    funcaoGes: "Soldador Industrial / Caldeireiro",
     necessarioEpi: true,
     epi1Id: "epi-1", // Plug 3M Pomps (15 dB)
     ca1: "11512",
@@ -103,14 +133,33 @@ export const DEFAULT_GHES: GHE[] = [
     nrrsf2: 18,
     atenuacao2: 12,
     eficaz2: true,
-    medidasControlesAdicionais: "Substituição progressiva das esmerilhadeiras por modelos de menor emissão de ruído vibratório."
+    medidasControlesAdicionais: "Substituição progressiva de equipamentos por modelos de menor emissão sonora e rotação de postos."
   },
   {
     id: "ghe-3",
     gesNumero: "GHE-03",
-    avaliacaoRiscos: "Ruído disperso em galpão logístico e movimentação de empilhadeiras.",
-    intensidadeConcentracao: 78.5, // dB(A) - Below Action Level 80 dB(A)
-    funcaoGes: "Conferente / Operador de Empilhadeira",
+    avaliacaoRiscos: "Ruído contínuo proveniente de eixos e ferramentas de usinagem e tornos mecânicos.",
+    intensidadeConcentracao: 82.0, // dB(A) - 80 a 84.9 dB com nível de ação (Amarelo) -> Vinculado ao Grupo 2 (Não-NPSE)
+    funcaoGes: "Torneiro Mecânico / Operador de Usinagem",
+    necessarioEpi: true,
+    epi1Id: "epi-1",
+    ca1: "11512",
+    nrrsf1: 15,
+    atenuacao1: 10,
+    eficaz1: true,
+    epi2Id: "",
+    ca2: "",
+    nrrsf2: 0,
+    atenuacao2: 0,
+    eficaz2: false,
+    medidasControlesAdicionais: "Lubrificação acústica periódica de barramentos e manutenção preventiva dos motores elétricos."
+  },
+  {
+    id: "ghe-4",
+    gesNumero: "GHE-04",
+    avaliacaoRiscos: "Ruído ambiente de movimentação de cargas leves e atividades de suporte administrativo.",
+    intensidadeConcentracao: 76.5, // dB(A) - Até 79 dB sem nível de ação (Verde) -> Vinculado ao Grupo 1 (Normais)
+    funcaoGes: "Conferente / Assistente Administrativo",
     necessarioEpi: false,
     epi1Id: "",
     ca1: "",
@@ -122,7 +171,7 @@ export const DEFAULT_GHES: GHE[] = [
     nrrsf2: 0,
     atenuacao2: 0,
     eficaz2: false,
-    medidasControlesAdicionais: "Medidas administrativas: Rotação de turnos de trabalho e controle de manutenção de frota de empilhadeiras."
+    medidasControlesAdicionais: "Medidas administrativas: Adequação ergonômica de layouts e manutenção predial regular."
   }
 ];
 
@@ -205,11 +254,11 @@ export const DEFAULT_EMPLOYEES: Employee[] = [
     dataExame: "2026-03-20",
     dataExameAtual: "2026-03-20",
     tipoExameAtual: "Periódico",
-    parecerAudiologico: "Limiares Auditivos Normais (LNA)",
-    parecerOrelhaDireita: "Limiares Auditivos Normais (LNA)",
+    parecerAudiologico: "Limiares Auditivos Normais com Entalhe",
+    parecerOrelhaDireita: "Limiares Auditivos Normais com Entalhe",
     parecerOrelhaEsquerda: "Limiares Auditivos Normais (LNA)",
-    avaliacaoAnexoII: "Estável",
-    observacao: "Limiares perfeitamente preservados bilateralmente. Uso adequado e regular do protetor de inserção.",
+    avaliacaoAnexoII: "Limiares Auditivos Normais com Entalhe",
+    observacao: "Limiares normais com entalhe acústico precoce em 6kHz na orelha direita. Uso regular do protetor auricular.",
     reteste: "Não necessário",
     dataPrevistaRetorno: "2027-03-20",
     statusAudiometrico: "Estável",
@@ -300,21 +349,21 @@ export const DEFAULT_EMPLOYEES: Employee[] = [
     dataEntregaProtetor: "",
     validade: "",
     validadeProtetor: "",
-    dataExameReferencia: "2024-11-18",
+    dataExameReferencia: "2024-05-10",
     tipoExameReferencia: "Admissional",
-    dataExame: "2025-11-18",
-    dataExameAtual: "2025-11-18",
+    dataExame: "2024-05-10",
+    dataExameAtual: "2024-05-10",
     tipoExameAtual: "Periódico",
     parecerAudiologico: "Limiares Auditivos Normais (LNA)",
     parecerOrelhaDireita: "Limiares Auditivos Normais (LNA)",
     parecerOrelhaEsquerda: "Limiares Auditivos Normais (LNA)",
-    avaliacaoAnexoII: "Não aplicável (Primeiro Exame / Admissional)",
-    observacao: "Nível de ruído local é de 78.5 dB. Colaboradora usufruindo férias regulamentares.",
+    avaliacaoAnexoII: "Estável",
+    observacao: "Colaboradora do Almoxarifado com exposição abaixo do nível de ação. Periodicidade específica bienal (24 meses). Exame vencido há mais de 30 dias.",
     reteste: "Não necessário",
-    dataPrevistaRetorno: "2026-11-18",
+    dataPrevistaRetorno: "2026-05-10",
     statusAudiometrico: "Estável",
-    situacao: "Férias",
-    situacaoTrabalhador: "Férias",
+    situacao: "Trabalhando",
+    situacaoTrabalhador: "Trabalhando",
     auditoria: "Não se aplica",
     auditoriaData: "",
     situacaoAuditoria: "Conforme",
@@ -526,5 +575,55 @@ export const DEFAULT_EMPLOYEES: Employee[] = [
     dataRetreinamento: "2026-07-18",
     horarioTreinamento: "10:30",
     localTreinamento: "Setor de Soldagem"
+  },
+  {
+    id: "emp-9",
+    cracha: "M0210",
+    nome: "Patrícia Helena Valadares",
+    idade: 38,
+    admissao: "2022-06-01",
+    nasc: "1988-03-22",
+    cpf: "901.234.567-88",
+    local: "Setor Administrativo",
+    cargo: "Assistente Administrativo de RH",
+    escala: "08:00 - 17:00 (5x2)",
+    gheId: "ghe-4",
+    localGes: "Administração Central",
+    funcaoGes: "Conferente / Assistente Administrativo",
+    npsDb: 68.0,
+    protetorVigenteId: "",
+    epi: "Sem Protetor Requerido (Abaixo do Nível de Ação)",
+    nrrsf: 0,
+    validadeCa: "",
+    dataEntrega: "",
+    dataEntregaProtetor: "",
+    validade: "",
+    validadeProtetor: "",
+    dataExameReferencia: "2022-06-05",
+    tipoExameReferencia: "Admissional",
+    dataExame: "2024-06-10",
+    dataExameAtual: "2024-06-10",
+    tipoExameAtual: "Periódico",
+    parecerAudiologico: "Limiares Auditivos Normais (LNA)",
+    parecerOrelhaDireita: "Limiares Auditivos Normais (LNA)",
+    parecerOrelhaEsquerda: "Limiares Auditivos Normais (LNA)",
+    avaliacaoAnexoII: "Estável",
+    observacao: "Colaboradora administrativa com ruído de conforto de 68 dB(A). Periodicidade específica bienal (24 meses). Exame periódico vencido há mais de 30 dias.",
+    reteste: "Não necessário",
+    dataPrevistaRetorno: "2026-06-10",
+    statusAudiometrico: "Estável",
+    situacao: "Trabalhando",
+    situacaoTrabalhador: "Trabalhando",
+    auditoria: "Não se aplica",
+    auditoriaData: "",
+    situacaoAuditoria: "Conforme",
+    auditoriaSituacao: "Conforme",
+    inadequacaoAuditoria: "Nenhuma",
+    auditoriaInadequacao: "Nenhuma",
+    auditoriaVencimento: "",
+    dataTreinamento: "2024-06-15",
+    dataRetreinamento: "2026-06-15",
+    horarioTreinamento: "14:00",
+    localTreinamento: "Sala de Treinamento - RH"
   }
 ];

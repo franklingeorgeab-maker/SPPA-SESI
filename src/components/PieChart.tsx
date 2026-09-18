@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 
-interface PieChartItem {
+export interface PieChartItem {
   label: string;
   value: number;
   color: string;
 }
 
-interface PieChartProps {
+export interface PieChartProps {
   data: PieChartItem[];
   title?: string;
   subtitle?: string;

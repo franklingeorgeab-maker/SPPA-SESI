@@ -102,12 +102,22 @@ export interface Employee {
   curvaOD?: string; // "Ascendente", "Descendente", "Horizontal", "Entalhe"
   curvaOE?: string; // "Ascendente", "Descendente", "Horizontal", "Entalhe"
   remocaoCerumen?: boolean; // Indicação de Remoção de Cerúmen
+  zumbido?: boolean; // Queixa de zumbido
+  usoFoneOuvido?: boolean; // Uso frequente de fone de ouvido
+  excessoCerumen?: boolean; // Excesso de cerúmen / rolha
+  comorbidade?: string; // "Diabetes", "Hipertensão", "Anemia", "Nenhuma"
   observacao: string; // Observação
   reteste: string; // Reteste (com tabela auxiliar/tipos)
   dataPrevistaRetorno: string; // Data prevista retorno (Normalmente 365 dias)
   statusAudiometrico: string; // Status (ESTÁVEL OU INSTÁVEL)
   situacao: string; // Situação (TRABALHANDO, APOSENTADO, FÉRIAS, INATIVO, etc.)
   situacaoTrabalhador: string; // Situação Trabalhador (keep for compatibility)
+
+  // Gestão de Exames Vencidos / Ações propostas
+  acaoVencimentoProposta?: string; // Ex: "Audiometria bianual", "Não realizar mais audiometria", etc.
+  motivoAcaoVencimento?: string; // Motivo / justificativa da conduta
+  dispensadoAudiometria?: boolean; // Se marcado para não realizar mais audiometria
+  periodicidadeMeses?: number; // Ex: 24 para bianual, 12 para anual
 
   // Auditoria fields
   auditoria: string; // Auditoria (Realizada, Pendente, Não se aplica)
@@ -127,34 +137,46 @@ export interface Employee {
 
 // Dropdown Helper Lists
 export const PARECER_AUDIOLOGICO_OPTIONS = [
+  "Sugestivo de PAINSPSE",
+  "Limiares Auditivos Normais com Entalhe",
   "Limiares Auditivos Normais (LNA)",
   "PAIR (Perda Auditiva Induzida por Ruído)",
   "Perda Auditiva Sensorioneural Não-Ocupacional",
   "Perda Auditiva Condutiva",
-  "Perda Auditiva Mista",
-  "Acompanhamento Preventivo"
+  "Perda Auditiva Mista"
 ];
 
+// Avaliação Anexo II NR7 - Restrito estritamente a "Sugestivo de PAINSPSE" ou "Limiares Auditivos Normais com Entalhe" conforme solicitado
 export const AVALIACAO_ANEXO_II_OPTIONS = [
-  "Estável",
-  "Desencadeamento",
-  "Agravamento",
-  "Não aplicável (Primeiro Exame / Admissional)"
+  "Sugestivo de PAINSPSE",
+  "Limiares Auditivos Normais com Entalhe"
 ];
 
+// Status: Estável ou Instável
 export const STATUS_OPTIONS = [
   "Estável",
   "Instável"
 ];
 
+// Situação: Trabalhando, Férias, Licença saúde, Aposentadoria, Demitido, etc.
 export const SITUACAO_TRABALHADOR_OPTIONS = [
   "Trabalhando",
-  "Aposentado",
   "Férias",
-  "Inativo",
+  "Licença saúde",
+  "Aposentadoria",
+  "Demitido",
   "Afastado",
-  "Licença Médica",
-  "Demitido"
+  "Inativo"
+];
+
+// Ações propostas para gestão de exames audiométricos vencidos
+export const ACAO_VENCIMENTO_OPTIONS = [
+  { value: "nenhuma", label: "Pendente de Ação / Convocação Imediata" },
+  { value: "bianual", label: "Audiometria Bianual (Exame de 2 em 2 anos)" },
+  { value: "dispensado", label: "Não realizar mais audiometria (Dispensado/Isento)" },
+  { value: "semestral", label: "Audiometria Semestral (Acompanhamento em 6 meses)" },
+  { value: "reteste_mtl", label: "Reteste Prioritário MTL (15 a 30 dias)" },
+  { value: "outro", label: "Outra conduta médica personalizada" }
 ];
 
 export const TIPO_EXAME_OPTIONS = [

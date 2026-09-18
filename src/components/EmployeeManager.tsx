@@ -422,7 +422,12 @@ export default function EmployeeManager({
     const matchedGheObj = ghes.find((g) => g.id === emp.gheId);
     const matchesGhe = !gheFilter || emp.gheId === gheFilter || (matchedGheObj && matchedGheObj.gesNumero === gheFilter);
     
-    const matchesParecer = !parecerFilter || emp.parecerAudiologico === parecerFilter;
+    const matchesParecer =
+      !parecerFilter ||
+      emp.avaliacaoAnexoII === parecerFilter ||
+      emp.parecerAudiologico === parecerFilter ||
+      (parecerFilter.includes("PAINSPSE") && (emp.avaliacaoAnexoII === "Sugestivo de PAINSPSE" || emp.parecerAudiologico?.includes("PAIR"))) ||
+      (parecerFilter.includes("Entalhe") && (emp.avaliacaoAnexoII?.includes("Entalhe") || emp.parecerAudiologico?.includes("Entalhe")));
     const matchesAuditoria = !auditoriaFilter || emp.situacaoAuditoria === auditoriaFilter;
 
     return matchesSearch && matchesSector && matchesGhe && matchesParecer && matchesAuditoria;
@@ -1156,7 +1161,7 @@ export default function EmployeeManager({
         </form>
       )}
 
-      {/* Roster Controls: Search & Advanced filters */}
+      {/* Employee Controls: Search & Advanced filters */}
       <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-4">
         <div className="flex flex-col lg:flex-row gap-3">
           {/* Main search */}
@@ -1207,7 +1212,7 @@ export default function EmployeeManager({
               </select>
             </div>
 
-            {/* Parecer filter */}
+            {/* Avaliação Anexo II NR7 filter */}
             <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-200 rounded-lg px-2 py-1">
               <Filter className="w-3.5 h-3.5 text-slate-400 shrink-0" />
               <select
@@ -1215,10 +1220,10 @@ export default function EmployeeManager({
                 onChange={(e) => setParecerFilter(e.target.value)}
                 className="bg-transparent border-none text-xs text-slate-700 focus:outline-none w-full"
               >
-                <option value="">Todos Pareceres</option>
-                {PARECER_AUDIOLOGICO_OPTIONS.map((po) => (
-                  <option key={po} value={po}>
-                    {po.split(" (")[0]} {/* truncate to keep select short */}
+                <option value="">Avaliação Anexo II NR7</option>
+                {AVALIACAO_ANEXO_II_OPTIONS.map((ao) => (
+                  <option key={ao} value={ao}>
+                    {ao}
                   </option>
                 ))}
               </select>
@@ -1251,7 +1256,7 @@ export default function EmployeeManager({
                 <th className="py-3 px-4">Cargo & Setor</th>
                 <th className="py-3 px-4 text-center">GHE / GES</th>
                 <th className="py-3 px-4">EPI Vigente & Validade</th>
-                <th className="py-3 px-4 text-center">Parecer Clínico</th>
+                <th className="py-3 px-4 text-center">Avaliação Anexo II NR7</th>
                 <th className="py-3 px-4">Auditoria SPPA</th>
                 <th className="py-3 px-4 text-right">Ações</th>
               </tr>
@@ -1351,6 +1356,23 @@ export default function EmployeeManager({
                       </td>
                       <td className="py-3 px-4">
                         <div className="flex flex-col space-y-1">
+                          {/* Avaliação Anexo II NR7: Sugestivo de PAINSPSE ou Limiares Auditivos Normais com Entalhe */}
+                          {emp.avaliacaoAnexoII && (
+                            <span
+                              className={`px-2 py-0.5 rounded text-[10px] font-bold border ${
+                                emp.avaliacaoAnexoII === "Sugestivo de PAINSPSE" || (emp.parecerAudiologico && emp.parecerAudiologico.includes("PAIR"))
+                                  ? "bg-amber-50 text-amber-800 border-amber-200"
+                                  : "bg-cyan-50 text-cyan-800 border-cyan-200"
+                              }`}
+                            >
+                              {emp.avaliacaoAnexoII === "Sugestivo de PAINSPSE" || emp.avaliacaoAnexoII === "Limiares Auditivos Normais com Entalhe"
+                                ? emp.avaliacaoAnexoII
+                                : emp.parecerAudiologico?.includes("PAIR")
+                                ? "Sugestivo de PAINSPSE"
+                                : "Limiares Auditivos Normais com Entalhe"}
+                            </span>
+                          )}
+
                           {/* Ear-by-ear status display */}
                           <div className="flex gap-1.5 justify-start">
                             <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold ${
